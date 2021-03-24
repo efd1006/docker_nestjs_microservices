@@ -1,0 +1,47 @@
+version: "3.8"
+services: 
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    depends_on: 
+      - postgres
+      - microservice
+    ports:
+      - "8080:3000"
+    environment:
+      DATABASE_URL: postgres://user:password@postgres:5432/db
+      NODE_ENV: development
+      PORT: 3000
+    networks:
+      - local
+
+  postgres:
+    image: postgres:10.4
+    ports:
+      - "35000:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+    networks:
+      - local
+
+  microservice:
+    build:
+      dockerfile: Dockerfile
+      context: ../microservice
+    depends_on: 
+      - postgres
+    ports:
+      - "8877:9000"
+    environment:
+      DATABASE_URL: postgres://user:password@postgres:5432/db
+      NODE_ENV: development
+    networks:
+      - local
+
+networks:
+  local:
+    driver: bridge
+
