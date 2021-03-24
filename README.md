@@ -1,0 +1,1 @@
+# This is a small example of a Dockarised NestJS app with microservices and a database system.
